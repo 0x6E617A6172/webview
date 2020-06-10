@@ -195,6 +195,10 @@ func (w *webview) SetSize(width int, height int, hint Hint) {
 	C.webview_set_size(w.w, C.int(width), C.int(height), C.int(hint))
 }
 
+func (w *webview) SetFullscreen(fullscreen bool) {
+	C.CgoWebViewSetFullscreen(w.w, C.int(boolToInt(fullscreen)))
+}
+
 func (w *webview) Init(js string) {
 	s := C.CString(js)
 	defer C.free(unsafe.Pointer(s))
@@ -224,6 +228,7 @@ func _webviewDispatchGoCallback(index unsafe.Pointer) {
 	m.Unlock()
 	f()
 }
+
 
 //export _webviewBindingGoCallback
 func _webviewBindingGoCallback(w C.webview_t, id *C.char, req *C.char, index uintptr) {
