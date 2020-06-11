@@ -66,6 +66,8 @@ WEBVIEW_API void *webview_get_window(webview_t w);
 // Updates the title of the native window. Must be called from the UI thread.
 WEBVIEW_API void webview_set_title(webview_t w, const char *title);
 
+WEBVIEW_API void webview_set_fullscreen(webview_t w, int flag);
+
 // Window size hints
 #define WEBVIEW_HINT_NONE 0  // Width and height are default size
 #define WEBVIEW_HINT_MIN 1   // Width and height are minimum bounds
@@ -512,6 +514,15 @@ public:
     }
   }
 
+  void set_fullscreen(int flag) {
+    // gtk realization
+    if (fullscreen) {
+      gtk_window_fullscreen(GTK_WINDOW(w->priv.window));
+    } else {
+      gtk_window_unfullscreen(GTK_WINDOW(w->priv.window));
+    }
+  }
+
   void navigate(const std::string url) {
     webkit_web_view_load_uri(WEBKIT_WEB_VIEW(m_webview), url.c_str());
   }
@@ -562,6 +573,8 @@ using browser_engine = gtk_webkit_engine;
 #define NSWindowStyleMaskMiniaturizable 4
 #define NSWindowStyleMaskTitled 1
 #define NSWindowStyleMaskClosable 2
+#define NSWindowStyleMaskFullScreen 1
+//#define NSWindowStyleMaskFullScreen 5
 
 #define NSApplicationActivationPolicyRegular 0
 
@@ -687,6 +700,9 @@ public:
       objc_msgSend(m_window, "setFrame:display:animate:"_sel,
                    CGRectMake(0, 0, width, height), 1, 0);
     }
+  }
+  void set_fullscreen(int is_fullscreen) {
+    // macos realization
   }
   void navigate(const std::string url) {
     auto nsurl = objc_msgSend(
@@ -1053,6 +1069,10 @@ public:
     }
   }
 
+  void set_fullscreen(int flag) {
+    // windows realization
+  }
+
   void navigate(const std::string url) { m_browser->navigate(url); }
   void eval(const std::string js) { m_browser->eval(js); }
   void init(const std::string js) { m_browser->init(js); }
@@ -1186,6 +1206,10 @@ WEBVIEW_API void *webview_get_window(webview_t w) {
 
 WEBVIEW_API void webview_set_title(webview_t w, const char *title) {
   static_cast<webview::webview *>(w)->set_title(title);
+}
+
+WEBVIEW_API void webview_set_fullscreen(webview_t w, const int flag) {
+  static_cast<webview::webview *>(w)->set_fullscreen(flag);
 }
 
 WEBVIEW_API void webview_set_size(webview_t w, int width, int height,

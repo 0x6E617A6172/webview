@@ -103,6 +103,9 @@ type WebView interface {
 	// SetSize updates native window size. See Hint constants.
 	SetSize(w int, h int, hint Hint)
 
+	// SetFullscreen меняет режим окна на полноэкранный или оконный.
+	SetFullscreen(isFullscreen bool)
+
 	// Navigate navigates webview to the given URL. URL may be a data URI, i.e.
 	// "data:text/text,<html>...</html>". It is often ok not to url-encode it
 	// properly, webview will re-encode it for you.
@@ -195,8 +198,8 @@ func (w *webview) SetSize(width int, height int, hint Hint) {
 	C.webview_set_size(w.w, C.int(width), C.int(height), C.int(hint))
 }
 
-func (w *webview) SetFullscreen(fullscreen bool) {
-	C.CgoWebViewSetFullscreen(w.w, C.int(boolToInt(fullscreen)))
+func (w *webview) SetFullscreen(isFullscreen bool) {
+	C.webview_set_fullscreen(w.w, C.int(boolToInt(isFullscreen)))
 }
 
 func (w *webview) Init(js string) {
@@ -228,7 +231,6 @@ func _webviewDispatchGoCallback(index unsafe.Pointer) {
 	m.Unlock()
 	f()
 }
-
 
 //export _webviewBindingGoCallback
 func _webviewBindingGoCallback(w C.webview_t, id *C.char, req *C.char, index uintptr) {
