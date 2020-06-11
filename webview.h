@@ -66,7 +66,7 @@ WEBVIEW_API void *webview_get_window(webview_t w);
 // Updates the title of the native window. Must be called from the UI thread.
 WEBVIEW_API void webview_set_title(webview_t w, const char *title);
 
-WEBVIEW_API void webview_set_fullscreen(webview_t w, int flag);
+WEBVIEW_API void webview_set_fullscreen(webview_t w, int is_fullscreen);
 
 // Window size hints
 #define WEBVIEW_HINT_NONE 0  // Width and height are default size
@@ -514,9 +514,9 @@ public:
     }
   }
 
-  void set_fullscreen(int flag) {
+  void set_fullscreen(int is_fullscreen) {
     // gtk realization
-    if (fullscreen) {
+    if (is_fullscreen) {
       gtk_window_fullscreen(GTK_WINDOW(w->priv.window));
     } else {
       gtk_window_unfullscreen(GTK_WINDOW(w->priv.window));
