@@ -517,9 +517,9 @@ public:
   void set_fullscreen(int is_fullscreen) {
     // gtk realization
     if (is_fullscreen) {
-      gtk_window_fullscreen(GTK_WINDOW(m_window->priv.window));
+      gtk_window_fullscreen(GTK_WINDOW(m_window->priv->window));
     } else {
-      gtk_window_unfullscreen(GTK_WINDOW(m_window->priv.window));
+      gtk_window_unfullscreen(GTK_WINDOW(m_window->priv->window));
     }
   }
 
