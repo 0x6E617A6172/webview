@@ -517,9 +517,9 @@ public:
   void set_fullscreen(int is_fullscreen) {
     // gtk realization
     if (is_fullscreen) {
-      gtk_window_fullscreen(GTK_WINDOW(m_window->priv->window));
+      gtk_window_fullscreen(GTK_WINDOW(m_window));
     } else {
-      gtk_window_unfullscreen(GTK_WINDOW(m_window->priv->window));
+      gtk_window_unfullscreen(GTK_WINDOW(m_window));
     }
   }
 
@@ -1069,7 +1069,7 @@ public:
     }
   }
 
-  void set_fullscreen(int flag) {
+  void set_fullscreen(int is_fullscreen) {
     // windows realization
   }
 
@@ -1208,8 +1208,8 @@ WEBVIEW_API void webview_set_title(webview_t w, const char *title) {
   static_cast<webview::webview *>(w)->set_title(title);
 }
 
-WEBVIEW_API void webview_set_fullscreen(webview_t w, const int flag) {
-  static_cast<webview::webview *>(w)->set_fullscreen(flag);
+WEBVIEW_API void webview_set_fullscreen(webview_t w, const int is_fullscreen) {
+  static_cast<webview::webview *>(w)->set_fullscreen(is_fullscreen);
 }
 
 WEBVIEW_API void webview_set_size(webview_t w, int width, int height,
