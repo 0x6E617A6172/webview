@@ -106,6 +106,12 @@ type WebView interface {
 	// SetFullscreen меняет режим окна на полноэкранный или оконный.
 	SetFullscreen(isFullscreen bool)
 
+	// HideCursor дает возможность скрыть курсор
+	HideCursor()
+
+	//DisableRightClick отключает возможность нажатия правой кнопки мыши
+	DisableRightClick()
+
 	// Navigate navigates webview to the given URL. URL may be a data URI, i.e.
 	// "data:text/text,<html>...</html>". It is often ok not to url-encode it
 	// properly, webview will re-encode it for you.
@@ -200,6 +206,14 @@ func (w *webview) SetSize(width int, height int, hint Hint) {
 
 func (w *webview) SetFullscreen(isFullscreen bool) {
 	C.webview_set_fullscreen(w.w, C.int(boolToInt(isFullscreen)))
+}
+
+func (w *webview) HideCursor() {
+	C.webview_hide_cursor(w.w)
+}
+
+func (w *webview) DisableRightClick() {
+	C.webview_disable_right_click(w.w)
 }
 
 func (w *webview) Init(js string) {

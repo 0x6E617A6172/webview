@@ -68,6 +68,10 @@ WEBVIEW_API void webview_set_title(webview_t w, const char *title);
 
 WEBVIEW_API void webview_set_fullscreen(webview_t w, int is_fullscreen);
 
+WEBVIEW_API void webview_hide_cursor(webview_t w);
+
+WEBVIEW_API void webview_disable_right_click(webview_t w);
+
 // Window size hints
 #define WEBVIEW_HINT_NONE 0  // Width and height are default size
 #define WEBVIEW_HINT_MIN 1   // Width and height are minimum bounds
@@ -523,6 +527,18 @@ public:
     }
   }
 
+  void hide_cursor() {
+    GdkCursor* Cursor = gdk_cursor_new(GDK_BLANK_CURSOR);
+    GdkWindow* win = gtk_widget_get_window(m_window);
+    gdk_window_set_cursor(win, Cursor);
+  }
+
+  void disable_right_click() {
+    g_signal_connect(G_OBJECT(m_window), "context-menu",
+      G_CALLBACK(true),
+      NULL);
+  }
+
   void navigate(const std::string url) {
     webkit_web_view_load_uri(WEBKIT_WEB_VIEW(m_webview), url.c_str());
   }
@@ -704,6 +720,18 @@ public:
   void set_fullscreen(int is_fullscreen) {
     // macos realization
   }
+
+  void hide_cursor() {
+    // hide cursor for macos
+  }
+
+  void disable_right_click() {
+    // disable right clicl for macos
+    // g_signal_connect(G_OBJECT(m_window), "context-menu",
+    //   G_CALLBACK(true),
+    //   NULL);
+  }
+
   void navigate(const std::string url) {
     auto nsurl = objc_msgSend(
         "NSURL"_cls, "URLWithString:"_sel,
@@ -1073,6 +1101,14 @@ public:
     // windows realization
   }
 
+  void hide_cursor() {
+    // hide cursor on windows
+  }
+
+  void disable_right_click() {
+    // disable right click on windows
+  }
+
   void navigate(const std::string url) { m_browser->navigate(url); }
   void eval(const std::string js) { m_browser->eval(js); }
   void init(const std::string js) { m_browser->init(js); }
@@ -1210,6 +1246,14 @@ WEBVIEW_API void webview_set_title(webview_t w, const char *title) {
 
 WEBVIEW_API void webview_set_fullscreen(webview_t w, const int is_fullscreen) {
   static_cast<webview::webview *>(w)->set_fullscreen(is_fullscreen);
+}
+
+WEBVIEW_API void webview_hide_cursor(webview_t w) {
+  static_cast<webview::webview *>(w)->hide_cursor();
+}
+
+WEBVIEW_API void webview_disable_right_click(webview_t w) {
+  static_cast<webview::webview *>(w)->disable_right_click();
 }
 
 WEBVIEW_API void webview_set_size(webview_t w, int width, int height,
