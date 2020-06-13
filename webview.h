@@ -481,7 +481,7 @@ public:
       webkit_settings_set_enable_write_console_messages_to_stdout(settings,
                                                                   true);
       webkit_settings_set_enable_developer_extras(settings, true);
-      webkit_context_menu_remove_all(); // test
+      // webkit_context_menu_remove_all(); // test
     }
 
     gtk_widget_show_all(m_window);
@@ -536,7 +536,9 @@ public:
 
   void disable_right_click() {
     g_signal_connect(G_OBJECT(m_window), "context-menu",
-      G_CALLBACK(true),
+      G_CALLBACK(+[](GtkWidget *, gpointer arg) {
+                      return true;
+                    }),
       NULL);
   }
 
