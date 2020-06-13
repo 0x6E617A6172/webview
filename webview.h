@@ -481,6 +481,7 @@ public:
       webkit_settings_set_enable_write_console_messages_to_stdout(settings,
                                                                   true);
       webkit_settings_set_enable_developer_extras(settings, true);
+      webkit_context_menu_remove_all(); // test
     }
 
     gtk_widget_show_all(m_window);
